@@ -1,4 +1,7 @@
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import oesk.mongodb.MongoConnect;
+import oesk.mongodb.MongoLoader;
 import oesk.sqlite.Connect;
 import oesk.sqlite.DatabaseLoader;
 import oesk.sqlite.TableCreator;
@@ -12,7 +15,8 @@ public class Main {
 
 
     public static void main(String[] args) {
-      testSQLite();
+      //testSQLite();
+      testMongo();
     }
 
     public static void testSQLite(){
@@ -24,7 +28,10 @@ public class Main {
     }
 
     public static void testMongo(){
-        MongoConnect.createDatabase();
+        MongoDatabase database = MongoConnect.createDatabase(files[0]);
+        MongoLoader.load("C:\\Users\\48783\\Desktop\\mgr1\\OESKlab\\files\\" + files[0] + ".txt",database);
+
     }
+
 }
 

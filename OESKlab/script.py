@@ -1,14 +1,19 @@
 import sqlite3
 from datetime import datetime
 
+files = ["50sample", "100sample", "150sample", "250sample", "500sample"]
+
+
 def main():
     conn = sqlite3.connect('C:\\Users\\48783\\Desktop\\mgr1\\OESKlab\\sqlite\\python.db')
-    create_samples_table(conn)
-    cursor = conn.cursor()
-    read_into_database(cursor, "C:\\Users\\48783\\Desktop\\mgr1\\OESKlab\\files\\50sample.txt")
-    conn.commit()
-    cursor.close()
+    for file in files:
+        create_samples_table(conn)
+        cursor = conn.cursor()
+        read_into_database(cursor, "C:\\Users\\48783\\Desktop\\mgr1\\OESKlab\\files\\"+ file+ ".txt")
+        conn.commit()
+        cursor.close()
     conn.close()
+
 
 def create_samples_table(conn):
     conn.execute('DROP TABLE IF EXISTS samples')
@@ -39,7 +44,7 @@ def read_into_database(cursor, file_name):
             cursor.execute('INSERT INTO samples (user_id , track_id, listen_date)VALUES(?,?,?);',
                            (data[0], data[1], date_id))
 
-    print(cursor.execute('select count(*) from dates'))
+    #print(cursor.execute('select count(*) from dates'))
 
 
 if __name__ == "__main__":
