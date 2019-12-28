@@ -1,4 +1,3 @@
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import oesk.mongodb.MongoConnect;
 import oesk.mongodb.MongoLoader;
@@ -7,7 +6,6 @@ import oesk.sqlite.DatabaseLoader;
 import oesk.sqlite.TableCreator;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 public class Main {
 
@@ -21,16 +19,22 @@ public class Main {
 
     public static void testSQLite(){
         Connection connection = Connect.getInstance();
-
-        TableCreator.createTables(connection);
-        System.out.println("Started load database");
-        DatabaseLoader.load("C:\\Users\\48783\\Desktop\\mgr1\\OESKlab\\files\\" + files[0] + ".txt", connection);
+        for (String file: files) {
+            TableCreator.createTables(connection);
+            System.out.println("Started load database");
+            DatabaseLoader.load(getPath(file), connection);
+        }
     }
 
     public static void testMongo(){
-        MongoDatabase database = MongoConnect.createDatabase(files[0]);
-        MongoLoader.load("C:\\Users\\48783\\Desktop\\mgr1\\OESKlab\\files\\" + files[0] + ".txt",database);
+        for (String file: files) {
+            MongoDatabase database = MongoConnect.createDatabase(files[0]);
+            MongoLoader.load(getPath(file), database);
+        }
+    }
 
+    private static String getPath(String file){
+        return "C:\\Users\\48783\\Desktop\\mgr1\\OESKlab\\files\\" + file + ".txt" ;
     }
 
 }
