@@ -27,7 +27,7 @@ public class MongoLoader {
                 Date readable = new Date(date*1000);
                 cal.setTime(readable);
                 listDates.add(toDBObjectDates(cal,id));
-                listSamples.add(toDBObjectSamples(data[0], data[1] ,id));
+                listSamples.add(toDBObjectSamples(data[0], data[1] ,++id));
                 if(++iterator > 1000) {
                     collection_dates.insertMany(listDates);
                     collection_samples.insertMany(listSamples);

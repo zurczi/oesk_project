@@ -1,3 +1,5 @@
+package oesk;
+
 import com.mongodb.client.MongoDatabase;
 import oesk.mongodb.MongoConnect;
 import oesk.mongodb.MongoLoader;
@@ -13,7 +15,7 @@ public class Main {
 
 
     public static void main(String[] args) {
-      //testSQLite();
+      testSQLite();
       testMongo();
     }
 
@@ -28,7 +30,7 @@ public class Main {
 
     public static void testMongo(){
         for (String file: files) {
-            MongoDatabase database = MongoConnect.createDatabase(files[0]);
+            MongoDatabase database = MongoConnect.createDatabase(file);
             MongoLoader.load(getPath(file), database);
         }
     }

@@ -1,20 +1,22 @@
+import profile
 import sqlite3
 from datetime import datetime
 
-files = ["50sample", "100sample", "150sample", "250sample", "500sample"]
+files = ["50sample"]  # , "100sample", "150sample", "250sample", "500sample"]
 
 
+@profile
 def main():
     conn = sqlite3.connect('C:\\Users\\48783\\Desktop\\mgr1\\OESKlab\\sqlite\\python.db')
     for file in files:
         create_samples_table(conn)
         cursor = conn.cursor()
-        read_into_database(cursor, "C:\\Users\\48783\\Desktop\\mgr1\\OESKlab\\files\\"+ file+ ".txt")
+        read_into_database(cursor, "C:\\Users\\48783\\Desktop\\mgr1\\OESKlab\\files\\" + file + ".txt")
         conn.commit()
         cursor.close()
     conn.close()
 
-
+@profile
 def create_samples_table(conn):
     conn.execute('DROP TABLE IF EXISTS samples')
     conn.execute('DROP TABLE IF EXISTS dates')
@@ -33,6 +35,7 @@ def create_samples_table(conn):
     )''')
 
 
+@profile
 def read_into_database(cursor, file_name):
     with open(file_name, encoding="ISO-8859-1") as f:
         for line in f:
@@ -44,8 +47,8 @@ def read_into_database(cursor, file_name):
             cursor.execute('INSERT INTO samples (user_id , track_id, listen_date)VALUES(?,?,?);',
                            (data[0], data[1], date_id))
 
-    #print(cursor.execute('select count(*) from dates'))
+    # print(cursor.execute('select count(*) from dates'))
 
 
-if __name__ == "__main__":
+if __name__ == "__ania__":
     main()

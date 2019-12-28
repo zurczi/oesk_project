@@ -10,9 +10,11 @@ import java.util.TimeZone;
 import java.util.stream.Stream;
 
 public class DatabaseLoader {
+
     private static final String datesSQL = "INSERT INTO dates (day , month, year) VALUES(?,?,?);";
     private static final String samplesSQL = "INSERT INTO samples (user_id , track_id, listen_date)VALUES(?,?,?);";
     private static Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+
     public static void load(String path, Connection connection){
         try{
             connection.setAutoCommit(false);
@@ -20,53 +22,46 @@ public class DatabaseLoader {
             int batchSize = 0;
             int iterator = 0;
 
-            PreparedStatement pstmt_dates = connection.prepareStatement(datesSQL);
-        //    lastrowid = connection.prepareStatement(
-          //          "select last_insert_rowid();");
-            PreparedStatement pstmt_samples = connection.prepareStatement(samplesSQL);
+            PreparedStatement pstmtDates = connection.prepareStatement(datesSQL);
+            PreparedStatement pstmtSamples = connection.prepareStatement(samplesSQL);
 
             try (Stream<String> stream = Files.lines(Paths.get(path))) {
                 for( String line : (Iterable<String>) stream::iterator ) {
                     String[] data = line.split("<SEP>");
-
                     long date = Long.parseLong(data[2]);
                     Date readable = new Date(date*1000);
                     cal.setTime(readable);
 
-                    pstmt_dates.setInt(1, cal.get(Calendar.DAY_OF_MONTH));
-                    pstmt_dates.setInt(2, cal.get(Calendar.MONTH));
-                    pstmt_dates.setInt(3, cal.get(Calendar.YEAR));
+                    pstmtDates.setInt(1, cal.get(Calendar.DAY_OF_MONTH));
+                    pstmtDates.setInt(2, cal.get(Calendar.MONTH));
+                    pstmtDates.setInt(3, cal.get(Calendar.YEAR));
+                    pstmtDates.addBatch();
 
-                   // pstmt_dates.execute();
-                    pstmt_dates.addBatch();
-//                    ResultSet lastrowidResult = lastrowid.executeQuery();
+                    pstmtSamples.setString(1,data[0]);
+                    pstmtSamples.setString(2,data[1]);
+                    pstmtSamples.setInt(3,++iterator);
+                    pstmtSamples.addBatch();
 
-                    pstmt_samples.setString(1,data[0]);
-                    pstmt_samples.setString(2,data[1]);
-                    pstmt_samples.setInt(3,++iterator);//lastrowidResult.getInt(1));
-                   // pstmt_samples.execute();
-                    pstmt_samples.addBatch();
-                    if(batchSize++ > 1000){ //Execute every 100 rows
-                        System.out.println(iterator);
-                        pstmt_dates.executeBatch();
-                        pstmt_samples.executeBatch();
+                    if(batchSize++ > 1000){
+                        //System.out.println(iterator);
+                        pstmtDates.executeBatch();
+                        pstmtSamples.executeBatch();
                         batchSize = 0;
                     }
-                    //System.out.println(iterator);//lastrowidResult.getInt(1));
-
-
                 }
             }catch(Exception e){
                 e.printStackTrace();
             }
+
             if (batchSize > 0) {
-                pstmt_dates.executeBatch();
-                pstmt_samples.executeBatch();
+                pstmtDates.executeBatch();
+                pstmtSamples.executeBatch();
             }
+
             connection.commit();
-            pstmt_samples.close();
-          //  lastrowid.close();
-            pstmt_dates.close();
+            pstmtSamples.close();
+            pstmtDates.close();
+
         }catch(Exception e){
             e.printStackTrace();
         }

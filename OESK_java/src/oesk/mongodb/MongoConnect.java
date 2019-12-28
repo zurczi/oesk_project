@@ -10,10 +10,9 @@ import com.mongodb.client.MongoIterable;
 import java.util.List;
 
 public class MongoConnect {
-    public MongoClient mongoClient = new MongoClient();
+    public static MongoClient mongoClient = new MongoClient();
 
     public static MongoDatabase createDatabase(String fileName){
-        MongoClient mongoClient = new MongoClient();
         MongoCursor<String> dbsCursor = mongoClient.listDatabaseNames().iterator();
         while(dbsCursor.hasNext()) {
             if(dbsCursor.next().equals("db_java_"+fileName)){
@@ -22,8 +21,6 @@ public class MongoConnect {
         }
         MongoDatabase database = mongoClient.getDatabase("db_java_"+fileName);
         return database;
-     /*   MongoCollection collection_dates = database.getCollection("dates");
-        MongoCollection collection_samples = database.getCollection("samples");*/
 
     }
 }
