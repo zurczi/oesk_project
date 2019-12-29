@@ -1,12 +1,23 @@
 from datetime import datetime
 import pymongo
-import profile
 from OESKlab.measure_script import fn_timer
 
 files = ["50sample"]#, "100sample", "150sample", "250sample", "500sample"]
+my_client = pymongo.MongoClient("mongodb://localhost:27017/")
 
 
 @fn_timer
+def run_one_file(file):
+    db_list = my_client.list_database_names()
+    if file in db_list:
+        my_client.drop_database(file)
+    my_db = my_client[file]
+    samples = my_db["samples"]
+    dates = my_db["dates"]
+    file_path = file_name(file)
+    insert_into_db(file_path, samples, dates)
+
+
 def insert_into_db(file, samples_collection, dates_collection):
     samples = []
     dates = []
@@ -45,17 +56,8 @@ def create_json(line, id):
 
 
 def main():
-    my_client = pymongo.MongoClient("mongodb://localhost:27017/")
     for file in files:
-        print(file)
-        db_list = my_client.list_database_names()
-        if file in db_list:
-            my_client.drop_database(file)
-        my_db = my_client[file]
-        samples = my_db["samples"]
-        dates = my_db["dates"]
-        file_path = file_name(file)
-        insert_into_db(file_path, samples, dates)
+        run_one_file(file)
     my_client.close()
 
 
