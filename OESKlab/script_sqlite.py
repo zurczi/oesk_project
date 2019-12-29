@@ -6,7 +6,7 @@ from OESKlab.measure_script import Measurement
 import time
 
 
-files = ["50sample"]  # , "100sample", "150sample", "250sample", "500sample"]
+files = ["50sample", "100sample", "150sample", "250sample", "500sample"]
 conn = sqlite3.connect('C:\\Users\\48783\\Desktop\\mgr1\\OESKlab\\sqlite\\python.db')
 measurement_list = []
 

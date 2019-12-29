@@ -4,6 +4,7 @@ import os
 from functools import wraps
 import statistics
 
+
 class Measurement:
     name = ""
     cpu = []
@@ -23,6 +24,8 @@ class Measurement:
         self.cpu.append(cpu_data)
 
     def get_mean_cpu(self):
+       # for x in self.cpu:
+        #    print(x, end=',')
         return statistics.mean(self.cpu)
 
     def get_max_memory(self):

@@ -2,6 +2,7 @@ import psutil
 import random
 import threading
 
+
 class DisplayCPUAndMemory(threading.Thread):
     measurement = 0
 
@@ -18,8 +19,10 @@ class DisplayCPUAndMemory(threading.Thread):
         while self.running:
             self.measurement.append_to_cpu(current_process.cpu_percent(interval=1)/psutil.cpu_count())
             self.measurement.append_to_memory(current_process.memory_info()[0])
-            print(current_process.cpu_percent(interval=1)/psutil.cpu_count())
-            print(current_process.memory_info()[0])
+            #print("cpu",end = '')
+            #print(current_process.cpu_percent(interval=0.5)/psutil.cpu_count(),end='')
+            #print("memory:")
+            #print(current_process.memory_info()[0],end='')
 
     def stop(self):
         self.running = False

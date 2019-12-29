@@ -5,14 +5,7 @@ import com.sun.management.OperatingSystemMXBean;
 import java.lang.management.ManagementFactory;
 
 public class MainTimeDecorator {
-    public void measureTime() {
-        long startTime = System.currentTimeMillis();
 
-        // run functiron here
-        long stopTime = System.currentTimeMillis();
-        long elapsedTime = stopTime - startTime;
-        System.out.println(elapsedTime);
-    }
 
     public void calculateMemoryUsage() {
         long beforeUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
