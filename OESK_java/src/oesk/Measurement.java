@@ -1,5 +1,7 @@
 package oesk;
 
+import com.sun.org.apache.regexp.internal.RE;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,11 +39,15 @@ public class Measurement {
     }
 
     private double returnMeanCpu(){
-        return calculateAverage(this.cpu);
+        return calculateAverage(this.cpu)*100;
     }
 
     private double returnMaxMemory(){
-        return Collections.max(this.memory);
+        try {
+            return Collections.max(this.memory);
+        }catch (Exception e) {
+            return 0;
+        }
     }
 
     @Override

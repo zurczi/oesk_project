@@ -12,16 +12,16 @@ import java.util.ArrayList;
 
 public class Main {
 
-    private static final String[] files = {"50sample"};//,"100sample","150sample","250sample","500sample"};
+    private static final String[] files = {"50sample","100sample","150sample","250sample","500sample"};
 
     public static void main(String[] args) {
-        for (int i = 0; i < 3; i++) {
-            System.out.println("SQLIte");
+        for (int i = 0; i < 2; i++) {
+            System.out.println("SQLIte - " + i);
             ArrayList<Measurement> sqliteResult = testSQLite();
             for (Measurement m : sqliteResult) {
                 System.out.println(m.toString());
             }
-            System.out.println("Mongo");
+            System.out.println("Mongo - " + i);
             ArrayList<Measurement> mongoResult = testMongo();
             for (Measurement m : mongoResult) {
                 System.out.println(m.toString());
@@ -35,13 +35,17 @@ public class Main {
         for (String file : files) {
             Measurement measurement = new Measurement(file);
             sqliteMeasuremnet.add(measurement);
+            MeasurementCPUandMemory measurementCPUandMemory = new MeasurementCPUandMemory(measurement);
+            measurementCPUandMemory.start();
+
             long startTime = System.currentTimeMillis();
 
             TableCreator.createTables(connection);
             DatabaseLoader.load(getPath(file), connection);
-
+            measurementCPUandMemory.doStop();
             long stopTime = System.currentTimeMillis();
-            long elapsedTime = stopTime - startTime;
+
+            long elapsedTime = (stopTime - startTime)/1000;
             measurement.setTime(elapsedTime);
         }
         return sqliteMeasuremnet;
@@ -52,13 +56,17 @@ public class Main {
         for (String file : files) {
             Measurement measurement = new Measurement(file);
             mongoMeasurements.add(measurement);
+
+            MeasurementCPUandMemory measurementCPUandMemory = new MeasurementCPUandMemory(measurement);
+            measurementCPUandMemory.start();
+
             long startTime = System.currentTimeMillis();
 
             MongoDatabase database = MongoConnect.createDatabase(file);
             MongoLoader.load(getPath(file), database);
-
+            measurementCPUandMemory.doStop();
             long stopTime = System.currentTimeMillis();
-            long elapsedTime = stopTime - startTime;
+            long elapsedTime = (stopTime - startTime) / 1000;
             measurement.setTime(elapsedTime);
         }
         return mongoMeasurements;

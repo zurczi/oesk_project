@@ -33,8 +33,6 @@ class Measurement:
    #stat.median , mode, stdev , variance
 
 
-
-
 def measure():
     process = psutil.Process(os.getpid())
     print(process.cpu_percent())
