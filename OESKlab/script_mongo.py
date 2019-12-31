@@ -79,6 +79,8 @@ def main():
     for x in measurement_list:
         print(str(x))
 
+
+
 def file_name(file):
     return "C:\\Users\\48783\\Desktop\\mgr1\\OESKlab\\files\\" + file + ".txt"
 

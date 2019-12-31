@@ -72,7 +72,12 @@ def main():
     conn.close()
     for x in measurement_list:
         print(str(x))
-
+    print("Secound ----------------")
+    for file in files:
+        run_one_file(file_name(file))
+    conn.close()
+    for x in measurement_list:
+        print(str(x))
 
 if __name__ == "__main__":
     main()
