@@ -10,6 +10,7 @@ files = ["50sample", "100sample", "150sample", "250sample", "500sample"]
 conn = sqlite3.connect('C:\\Users\\48783\\Desktop\\mgr1\\OESKlab\\sqlite\\python.db')
 measurement_list = []
 
+
 def file_name(file):
     return "C:\\Users\\48783\\Desktop\\mgr1\\OESKlab\\files\\" + file + ".txt"
 
@@ -67,17 +68,15 @@ def read_into_database(cursor, file_name):
 
 
 def main():
-    for file in files:
-        run_one_file(file_name(file))
-    conn.close()
+    jdjd = [0,1]
+    for x in jdjd:
+        print("Obliczenie nr : " + str(x))
+        for file in files:
+            run_one_file(file_name(file))
+        #conn.close()
     for x in measurement_list:
         print(str(x))
-    print("Secound ----------------")
-    for file in files:
-        run_one_file(file_name(file))
     conn.close()
-    for x in measurement_list:
-        print(str(x))
 
 if __name__ == "__main__":
     main()

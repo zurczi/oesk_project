@@ -1,4 +1,4 @@
-import psutil
+import psutil, os
 import random
 import threading
 
@@ -14,7 +14,7 @@ class DisplayCPUAndMemory(threading.Thread):
 
         self.running = True
 
-        current_process = psutil.Process()
+        current_process = psutil.Process(os.getpid())
 
         while self.running:
             self.measurement.append_to_cpu(current_process.cpu_percent(interval=1)/psutil.cpu_count())
@@ -39,11 +39,11 @@ def i_hate_this():
 # ---
 
 
-#display_cpu = DisplayCPUAndMemory()
+display_cpu = DisplayCPUAndMemory()
 
-#display_cpu.start()
-#try:
-#    result = i_hate_this()
-#finally:
-#    display_cpu.stop()
+display_cpu.start()
+try:
+   result = i_hate_this()
+finally:
+   display_cpu.stop()
 
